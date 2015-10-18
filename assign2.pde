@@ -172,6 +172,7 @@ void keyReleased(){
         break;
       case LEFT:
         leftPressed = false;
+        break;
       case RIGHT:
         rightPressed = false;
         break;
