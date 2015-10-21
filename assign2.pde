@@ -27,7 +27,6 @@ void setup () {
   ENy = floor(random(60,401));
   TRx = floor(random(20,501));
   TRy = floor(random(60,401));
-  ENx = -61;
   gameState = GAME_START;
   speed     = 5;
   ENySpeed  = 0;
