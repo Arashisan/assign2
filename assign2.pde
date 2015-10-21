@@ -1,35 +1,37 @@
 //You should implement your assign2 here.
-PImage bg1, bg2, enemy, fighter, hp, treasure, start1, start2, end1, end2;
-int BGx, BG1x, BG2x, HPw, FIx, FIy, ENx, TRx, TRy, gameState, speed;
+PImage background1, background2, enemy, fighter, hpImg, treasure, 
+       start1, start2, end1, end2;
+int backgroundX, background1X, background2X, hpW, 
+    fighterX, fighterY, enemyX, treasureX, treasureY, gameState, speed;
 final int GAME_START=0, GAME_RUN=1, GAME_OVER=2;
-float ENy, ENySpeed;
+float enemyY, enemyYSpeed;
 boolean upPressed, downPressed, leftPressed, rightPressed;
 
 void setup () {
   size(640, 480);
   //loadImage
-  bg1      =  loadImage("img/bg1.png");
-  bg2      =  loadImage("img/bg2.png");
-  enemy    =  loadImage("img/enemy.png");
-  fighter  =  loadImage("img/fighter.png");
-  hp       =  loadImage("img/hp.png");
-  treasure =  loadImage("img/treasure.png");
-  start1   =  loadImage("img/start1.png");
-  start2   =  loadImage("img/start2.png");
-  end1     =  loadImage("img/end1.png");
-  end2     =  loadImage("img/end2.png");
+  background1=  loadImage("img/bg1.png");
+  background2=  loadImage("img/bg2.png");
+  enemy      =  loadImage("img/enemy.png");
+  fighter    =  loadImage("img/fighter.png");
+  hpImg      =  loadImage("img/hp.png");
+  treasure   =  loadImage("img/treasure.png");
+  start1     =  loadImage("img/start1.png");
+  start2     =  loadImage("img/start2.png");
+  end1       =  loadImage("img/end1.png");
+  end2       =  loadImage("img/end2.png");
   //init variables
-  BGx = 0;
-  HPw = 40;
-  FIx = 550;
-  FIy = 240;
-  ENx = -61;
-  ENy = floor(random(60,401));
-  TRx = floor(random(20,501));
-  TRy = floor(random(60,401));
-  gameState = GAME_START;
-  speed     = 5;
-  ENySpeed  = 0;
+  backgroundX = 0;
+  hpW         = 40;
+  fighterX    = 550;
+  fighterY    = 240;
+  enemyX      = -61;
+  enemyY      = floor(random(60,401));
+  treasureX   = floor(random(20,501));
+  treasureY   = floor(random(60,401));
+  gameState   = GAME_START;
+  speed       = 5;
+  enemyYSpeed = 0;
   upPressed = downPressed = leftPressed = downPressed = false;
 }
 void draw() {
@@ -49,88 +51,96 @@ void draw() {
          break;
       case GAME_RUN:
          //bg
-         image(bg2,BG2x,0);
-         image(bg1,BG1x,0);
-         BG2x = BGx + 640;
-         BG1x = BGx ;
-         BGx += 2;
-         BG2x = (BG2x %= 1280) - 640;
-         BG1x = (BG1x %= 1280) - 640;
+         image(background2,background2X,0);
+         image(background1,background1X,0);
+         background2X = backgroundX + 640;
+         background1X = backgroundX ;
+         backgroundX += 2;
+         background2X = (background2X %= 1280) - 640;
+         background1X = (background1X %= 1280) - 640;
+         
          //hp volume
-         if(HPw <= 0){
-           HPw = 0;
+         if(hpW <= 0){
+           hpW = 0;
            gameState = GAME_OVER;
          }
-         if(FIx-ENx <= 61 && FIy-ENy <= 61 && ENx-FIx <= 51 && ENy-FIy <= 51){
-           ENx = -61;
-           ENySpeed = 0;
-           ENy=floor(random(60,401));
-           if(HPw < 40)
-             HPw -= HPw;
+         if(fighterX-enemyX <= 61 && fighterY-enemyY <= 61 && 
+            enemyX-fighterX <= 51 && enemyY-fighterY <= 51){
+           enemyX = -61;
+           enemyYSpeed = 0;
+           enemyY=floor(random(60,401));
+           if(hpW < 40)
+             hpW -= hpW;
            else  
-             HPw -= 40;
+             hpW -= 40;
          }
-         if(FIx-TRx <= 41 && FIy-TRy <= 41 && TRx-FIx <= 51 && TRy-FIy <= 51){
-           TRx = floor(random(20,501));
-           TRy = floor(random(60,401));
-           if(HPw >= 200){
-             HPw = 200;
+         if(fighterX-treasureX <= 41 && fighterY-treasureY <= 41 && 
+            treasureX-fighterX <= 51 && treasureY-fighterY <= 51){
+           treasureX = floor(random(20,501));
+           treasureY = floor(random(60,401));
+           if(hpW >= 200){
+             hpW = 200;
            }
            else
-             HPw+=20;
+             hpW+=20;
          }
          stroke(255,0,0);
          fill(255,0,0);
-         rect(20,20,HPw,20);
-         //hp
-         image(hp,15,15);
+         rect(20,20,hpW,20);
+         
+         //hpImg
+         image(hpImg,15,15);
+         
          //treasure
-         image(treasure,TRx,TRy);
+         image(treasure,treasureX,treasureY);
+         
          //fighter
          if(upPressed)
-           FIy -= speed;
+           fighterY -= speed;
          if(downPressed)
-           FIy += speed;
+           fighterY += speed;
          if(leftPressed)
-           FIx -= speed;
+           fighterX -= speed;
          if(rightPressed)
-           FIx += speed;  
-         if(FIx<0)
-           FIx = 0;
-         if(FIx>590)
-           FIx = 590;
-         if(FIy<0)
-           FIy = 0;
-         if(FIy>430)
-           FIy = 430;
-         image(fighter,FIx,FIy);
+           fighterX += speed;  
+         //Boundary detection
+         if(fighterX<0)
+           fighterX = 0;
+         if(fighterX > 590)
+           fighterX = 590;
+         if(fighterY < 0)
+           fighterY = 0;
+         if(fighterY > 430)
+           fighterY = 430;
+         image(fighter,fighterX,fighterY);
+         
          //enemy
-         ENx += 4;
-         if(ENy < -51 || ENy > 531)
-           ENySpeed +=0;
+         enemyX += 4;
+         if(enemyY < -51 || enemyY > 531)
+           enemyYSpeed +=0;
          else{
-           if(ENy < (FIy))
-             ENySpeed += 0.2;
-           if(ENy > (FIy))
-             ENySpeed -= 0.2;
+           if(enemyY < fighterY)
+             enemyYSpeed += 0.2;
+           if(enemyY > fighterY)
+             enemyYSpeed -= 0.2;
          }
-         if(ENx > 640){
-           ENx = -61;
-           ENySpeed = 0;
-           ENy = floor(random(60,401));
+         if(enemyX > 640){
+           enemyX = -61;
+           enemyYSpeed = 0;
+           enemyY = floor(random(60,401));
          }
-         ENy = ENy + ENySpeed;
-         image(enemy,ENx,ENy);
+         enemyY = enemyY + enemyYSpeed;
+         image(enemy,enemyX,enemyY);
          break;
       case GAME_OVER:
          if(mouseY >305 && mouseY < 350 && mouseX > 205 && mouseX < 440){
            //click
            if(mousePressed){
-             FIx = 550;
-             FIy = 240;
-             TRx = floor(random(20,501));
-             TRy = floor(random(60,401));
-             HPw = 40;
+             fighterX = 550;
+             fighterY = 240;
+             treasureX = floor(random(20,501));
+             treasureY = floor(random(60,401));
+             hpW = 40;
              gameState = GAME_RUN;
            }
            //hover
