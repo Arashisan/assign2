@@ -4,7 +4,7 @@ PImage background1, background2, enemy, fighter, hpImg, treasure,
 int backgroundX, background1X, background2X, hpW, 
     fighterX, fighterY, enemyX, treasureX, treasureY, gameState, speed;
 final int GAME_START=0, GAME_RUN=1, GAME_OVER=2;
-float enemyY, enemyYSpeed;
+float enemyY;
 boolean upPressed, downPressed, leftPressed, rightPressed;
 
 void setup () {
@@ -31,7 +31,6 @@ void setup () {
   treasureY   = floor(random(60,401));
   gameState   = GAME_START;
   speed       = 5;
-  enemyYSpeed = 0;
   upPressed = downPressed = leftPressed = downPressed = false;
 }
 void draw() {
@@ -67,7 +66,6 @@ void draw() {
          if(fighterX-enemyX <= 61 && fighterY-enemyY <= 61 && 
             enemyX-fighterX <= 51 && enemyY-fighterY <= 51){
            enemyX = -61;
-           enemyYSpeed = 0;
            enemyY=floor(random(60,401));
            if(hpW < 40)
              hpW -= hpW;
@@ -116,20 +114,15 @@ void draw() {
          
          //enemy
          enemyX += 4;
-         if(enemyY < -51 || enemyY > 531)
-           enemyYSpeed +=0;
-         else{
-           if(enemyY < fighterY)
-             enemyYSpeed += 0.2;
-           if(enemyY > fighterY)
-             enemyYSpeed -= 0.2;
-         }
+         if(enemyY>fighterY)
+            enemyY+=((fighterY-enemyY))/40;
+         if(enemyY<fighterY)
+            enemyY+=((fighterY-enemyY))/40;
          if(enemyX > 640){
            enemyX = -61;
-           enemyYSpeed = 0;
            enemyY = floor(random(60,401));
          }
-         enemyY = enemyY + enemyYSpeed;
+         
          image(enemy,enemyX,enemyY);
          break;
       case GAME_OVER:
